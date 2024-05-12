@@ -8,11 +8,10 @@ from keboola.component.exceptions import UserException
 
 # configuration variables
 KEY_API_TOKEN = '#api_token'
-KEY_PRINT_HELLO = 'print_hello'
 
 # list of mandatory parameters => if some is missing,
 # component will fail with readable message on initialization.
-REQUIRED_PARAMETERS = [KEY_PRINT_HELLO]
+REQUIRED_PARAMETERS = [KEY_API_TOKEN]
 REQUIRED_IMAGE_PARS = []
 
 
@@ -35,7 +34,18 @@ class Component(ComponentBase):
         Main execution code
         """
 
-        print("abc")
+        # check for missing configuration parameters
+        self.validate_configuration_parameters(REQUIRED_PARAMETERS)
+        params = self.configuration.parameters
+
+        # set the data folder
+        self.data_folder = self.tables_out_path
+
+        # get the value of the api_token. Show only first 3 characters and fill the rest with *
+        api_token = params.get(KEY_API_TOKEN, '')
+        api_token = api_token[:3] + '*' * (len(api_token) - 3)
+
+        print(api_token)
 
 
 """

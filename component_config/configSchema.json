@@ -1,19 +1,32 @@
 {
   "type": "object",
-  "title": "extractor configuration",
   "required": [
-    "print_hello"
+    "#api_token"
   ],
   "properties": {
-    "print_hello": {
-      "type": "boolean",
-      "title": "Print Hello",
+    "#api_token": {
+      "type": "string",
+      "title": "Glami API key",
+      "format": "password",
+      "default": "",
+      "minLength": 1,
+      "description": "API token can be found in your Glami partner admin interface. It is stored in Settings -> E-shop settings -> API keys.",
       "propertyOrder": 1
     },
-    "debug": {
-      "type": "boolean",
-      "title": "Debug",
+    "dateFrom": {
+      "title": "Date from",
+      "type": "string",
+      "description": "Any date accepted by strtotime (https://www.php.net/manual/en/function.strtotime.php) function. Glami allows to download data from the last 365 days.",
+      "minLength": 1,
+      "default": "last 7 days",
       "propertyOrder": 2
+    },
+    "incremental_update": {
+      "type": "boolean",
+      "title": "Incremental Update",
+      "default": true,
+      "description": "If enabled, new or updated rows will be added to the storage table. If disabled, the table will be truncated before inserting new data. Recommended value is true.",
+      "propertyOrder": 3
     }
   }
 }
