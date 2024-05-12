@@ -8,10 +8,12 @@ from keboola.component.exceptions import UserException
 
 # configuration variables
 KEY_API_TOKEN = '#api_token'
+DATE_FROM = 'dateFrom'
+INCREMENTAL_UPDATE = 'incremental_update'
 
 # list of mandatory parameters => if some is missing,
 # component will fail with readable message on initialization.
-REQUIRED_PARAMETERS = [KEY_API_TOKEN]
+REQUIRED_PARAMETERS = [KEY_API_TOKEN, DATE_FROM]
 REQUIRED_IMAGE_PARS = []
 
 
@@ -45,7 +47,8 @@ class Component(ComponentBase):
         api_token = params.get(KEY_API_TOKEN, '')
         api_token = api_token[:3] + '*' * (len(api_token) - 3)
 
-        print(api_token)
+        logging.info(f"API token: {api_token}")
+        logging.info(f"Date from: {params.get(DATE_FROM)}")
 
 
 """
