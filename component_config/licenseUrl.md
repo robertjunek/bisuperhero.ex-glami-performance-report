@@ -1,0 +1,1 @@
+https://github.com/robertjunek/bisuperhero.ex-glami-performance-report/blob/master/LICENSE.md
