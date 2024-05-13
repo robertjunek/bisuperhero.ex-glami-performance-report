@@ -3,12 +3,14 @@ Template Component main class.
 
 """
 import logging
+from datetime import datetime
+import dateparser
 from keboola.component.base import ComponentBase
 from keboola.component.exceptions import UserException
 
 # configuration variables
 KEY_API_TOKEN = '#api_token'
-DATE_FROM = 'dateFrom'
+DATE_FROM = 'date_from'
 INCREMENTAL_UPDATE = 'incremental_update'
 
 # list of mandatory parameters => if some is missing,
@@ -18,37 +20,31 @@ REQUIRED_IMAGE_PARS = []
 
 
 class Component(ComponentBase):
-    """
-        Extends base class for general Python components. Initializes the CommonInterface
-        and performs configuration validation.
-
-        For easier debugging the data folder is picked up by default from `../data` path,
-        relative to working directory.
-
-        If `debug` parameter is present in the `config.json`, the default logger is set to verbose DEBUG mode.
-    """
-
     def __init__(self):
         super().__init__()
 
     def run(self):
-        """
-        Main execution code
-        """
-
-        # check for missing configuration parameters
-        self.validate_configuration_parameters(REQUIRED_PARAMETERS)
         params = self.configuration.parameters
+        DEFAULT_DAYS_AGO = 365
+        
+        # hidden_api_token is first 3 characters of the api_token and rest of the characters are replaced with '*'
+        hidden_api_token = params.get(KEY_API_TOKEN)[:3] + '*' * (len(params.get(KEY_API_TOKEN)) - 3)
 
-        # set the data folder
-        self.data_folder = self.tables_out_path
+        logging.debug(f"Received date_from: {params.get(DATE_FROM)} \n"
+                      f"Received incremental_update: {params.get(INCREMENTAL_UPDATE)} \n"
+                      f"Received api_token: {hidden_api_token}")
 
-        # get the value of the api_token. Show only first 3 characters and fill the rest with *
-        api_token = params.get(KEY_API_TOKEN, '')
-        api_token = api_token[:3] + '*' * (len(api_token) - 3)
+        param_date_from = params.get(DATE_FROM, f"{DEFAULT_DAYS_AGO} days ago")
 
-        logging.info(f"API token: {api_token}")
-        logging.info(f"Date from: {params.get(DATE_FROM)}")
+        date_from = dateparser.parse(param_date_from)
+        if date_from is None:
+            logging.error("Failed to parse 'dateFrom' parameter.")
+            exit(1)
+
+        formatted_date_from = date_from.strftime('%Y-%m-%d')
+        date_to = datetime.today().strftime('%Y-%m-%d')
+
+        logging.info(f"We will download data from {formatted_date_from} to {date_to}")
 
 
 """

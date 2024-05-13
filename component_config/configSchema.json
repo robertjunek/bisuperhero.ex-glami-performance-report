@@ -13,20 +13,30 @@
       "description": "API token can be found in your Glami partner admin interface. It is stored in Settings -> E-shop settings -> API keys.",
       "propertyOrder": 1
     },
-    "dateFrom": {
+    "glami_domain": {
+      "title": "Glami domain",
+      "enum": [
+        "cz", "sk", "ro", "bg"
+      ],
+      "type": "string",
+      "default": "cz",
+      "description": "Select the domain of your Glami account.",
+      "propertyOrder": 2
+    },
+    "date_from": {
       "title": "Date from",
       "type": "string",
       "description": "Any date accepted by strtotime (https://www.php.net/manual/en/function.strtotime.php) function. Glami allows to download data from the last 365 days.",
       "minLength": 1,
-      "default": "last 7 days",
-      "propertyOrder": 2
+      "default": "7 days ago",
+      "propertyOrder": 3
     },
     "incremental_update": {
       "type": "boolean",
       "title": "Incremental Update",
       "default": true,
       "description": "If enabled, new or updated rows will be added to the storage table. If disabled, the table will be truncated before inserting new data. Recommended value is true.",
-      "propertyOrder": 3
+      "propertyOrder": 4
     }
   }
 }
