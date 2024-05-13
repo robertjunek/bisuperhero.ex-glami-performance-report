@@ -26,7 +26,7 @@ class Component(ComponentBase):
     def run(self):
         params = self.configuration.parameters
         DEFAULT_DAYS_AGO = 365
-        
+
         # hidden_api_token is first 3 characters of the api_token and rest of the characters are replaced with '*'
         hidden_api_token = params.get(KEY_API_TOKEN)[:3] + '*' * (len(params.get(KEY_API_TOKEN)) - 3)
 
